@@ -48,11 +48,18 @@ body {
 .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%); top: -15%; left: -10%; }
 .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(201,168,76,0.1), transparent 70%); bottom: -10%; right: -5%; }
 
-/* --- CLEAN INTRO --- */
+/* --- CINEMATIC SPLIT INTRO --- */
 .intro-wrap { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
 .intro-panel { position: absolute; top: 0; width: 50%; height: 100%; background: var(--dark); transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1); }
-.intro-panel-left { left: 0; }
-.intro-panel-right { right: 0; }
+.intro-panel-left { left: 0; border-right: 0.5px solid var(--border); }
+.intro-panel-right { right: 0; border-left: 0.5px solid var(--border); }
+
+/* The Splitting Line Logic */
+.intro-panel-left::after { content:''; position: absolute; right: -1px; top: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.3s ease-out forwards; z-index: 100; }
+.intro-panel-right::before { content:''; position: absolute; left: -1px; bottom: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.3s ease-out forwards; z-index: 100; }
+
+@keyframes lineGrow { to { height: 100%; } }
+
 .intro-wrap.revealed .intro-panel-left { transform: translateX(-100%); }
 .intro-wrap.revealed .intro-panel-right { transform: translateX(100%); }
 
@@ -61,14 +68,10 @@ body {
 
 .intro-monogram { 
     font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--gold); 
-    letter-spacing: 12px; position: relative; z-index: 102;
-    animation: monogramFade 1.8s ease-in-out forwards;
+    letter-spacing: 12px; background: var(--dark); padding: 20px; position: relative; z-index: 102;
+    animation: monogramFade 1s 0.2s ease-out forwards; opacity: 0;
 }
-@keyframes monogramFade { 
-    0% { opacity: 0; transform: scale(0.98); } 
-    40% { opacity: 1; transform: scale(1); }
-    100% { opacity: 1; transform: scale(1); } 
-}
+@keyframes monogramFade { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
 /* --- CONTENT --- */
 .container { width: 100%; max-width: 440px; position: relative; z-index: 10; opacity: 0; transform: translateY(30px); transition: 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -87,7 +90,7 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
 .tagline { font-size: 11px; color: var(--white-dim); letter-spacing: 5px; text-transform: uppercase; opacity: 0.7; }
 .divider { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 25px auto 0; }
 
-/* --- CARDS & SECTIONS --- */
+/* --- CARDS & ACCORDION --- */
 .section { margin-bottom: 40px; opacity: 0; transform: translateY(20px); transition: 0.8s ease; }
 .section.reveal { opacity: 1; transform: translateY(0); }
 .section-label { font-size: 10px; font-weight: 500; color: var(--gold); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; display: block; }
@@ -158,8 +161,8 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    <p>I design and build custom websites that not only look great, but help turn visitors into customers. Every project is carefully hand-coded, phone-friendly, and optimized for your needs.</p>
-                    <p style="margin-top:12px;"><span class="highlight">Expertise:</span> Business sites, Shopify ecosystems, Booking systems, and AI-powered automation tools.</p>
+                    <p>I design and build custom websites that not only look great, but help turn visitors into customers. Hand-coded, performance-driven, and tailored to your brand.</p>
+                    <p style="margin-top:12px;"><span class="highlight">Expertise:</span> Business sites, Shopify ecosystems, and AI-powered automation.</p>
                 </div>
             </div>
         </div>
@@ -167,7 +170,7 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
 
     <div class="section">
         <span class="section-label">3005</span>
-        <div class="card" style="margin-bottom:12px">
+        <div class="card">
             <div class="card-header">
                 <span class="card-title">Venue &amp; Events</span>
                 <span class="card-icon">+</span>
@@ -181,25 +184,6 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
                         <span class="artist-tag">Mural Hall</span>
                         <span class="artist-tag">aWannabe</span>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <span class="section-label">R&eacute;sum&eacute;</span>
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Qualifications</span>
-                <span class="card-icon">+</span>
-            </div>
-            <div class="card-body">
-                <div class="card-content">
-                    <div class="resume-row"><span class="res-label">Experience</span><span style="font-size:13px">5+ years in IT &mdash; enterprise SharePoint administration, Power BI, and digital transformation.</span></div>
-                    <div class="resume-row"><span class="res-label">Education</span><span style="font-size:13px">IT Major &mdash; University of Wisconsin-Milwaukee (Sophomore)</span></div>
-                    <a href="https://docs.google.com/document/d/1Qo79HaJ3PCIA-Fp1Y9rJhVgpwsE6NXTojb_pCgo57lU/edit?tab=t.0#heading=h.aagfqklm9zwt" target="_blank" style="display:flex; align-items:center; gap:10px; margin-top:25px; text-decoration:none; color:var(--gold); font-size:11px; letter-spacing:2px; padding-top:15px; border-top:1px solid rgba(201,168,76,0.1); text-transform:uppercase;">
-                        <span>Extended R&eacute;sum&eacute;</span> <span>&rarr;</span>
-                    </a>
                 </div>
             </div>
         </div>
@@ -221,7 +205,7 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
         </a>
     </div>
 
-    <footer style="text-align:center; margin-top:60px; border-top:1px solid rgba(201,168,76,0.1); padding-top:30px">
+    <footer style="text-align:center; margin-top:60px; padding-top:30px">
         <p style="font-size:9px; letter-spacing:3px; opacity:0.3; text-transform:uppercase">&copy; 2026 Anthony Ferguson</p>
     </footer>
 </div>
@@ -235,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('mainContainer');
     const sections = document.querySelectorAll('.section');
 
-    // Simple Auto Reveal
+    // AUTO TRIGGER REVEAL SEQUENCE
     setTimeout(() => {
         intro.classList.add('revealed');
         container.classList.add('active');
@@ -243,9 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => s.classList.add('reveal'), 400 + (i * 150));
         });
         setTimeout(() => intro.style.display = 'none', 1500);
-    }, 1800);
+    }, 2000); // Wait for the gold line and monogram to settle
 
-    // Cursor & Parallax
+    // CURSOR & PARALLAX
     const dot = document.getElementById('dot');
     const outline = document.getElementById('outline');
     const orb1 = document.getElementById('orb1');
@@ -272,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // ACCORDION
     document.querySelectorAll('.card-header').forEach(header => {
         header.addEventListener('click', () => {
             const card = header.parentElement;
