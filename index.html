@@ -48,29 +48,28 @@ body {
 .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%); top: -15%; left: -10%; }
 .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(201,168,76,0.1), transparent 70%); bottom: -10%; right: -5%; }
 
-/* --- INTRO & ENTER TRIGGER --- */
-.intro-wrap { position: fixed; inset: 0; z-index: 100; cursor: pointer; }
+/* --- AUTO-INTRO --- */
+.intro-wrap { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
 .intro-panel { position: absolute; top: 0; width: 50%; height: 100%; background: var(--dark); transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1); }
 .intro-panel-left { left: 0; border-right: 0.5px solid var(--border); }
 .intro-panel-right { right: 0; border-left: 0.5px solid var(--border); }
 .intro-wrap.revealed .intro-panel-left { transform: translateX(-100%); }
 .intro-wrap.revealed .intro-panel-right { transform: translateX(100%); }
 
-.intro-panel-left::after { content:''; position: absolute; right: -1px; top: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.3s ease-out forwards; }
-.intro-panel-right::before { content:''; position: absolute; left: -1px; bottom: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.3s ease-out forwards; }
+/* Drawing Line Effect */
+.intro-panel-left::after { content:''; position: absolute; right: -1px; top: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.2s ease-out forwards; z-index: 100; }
+.intro-panel-right::before { content:''; position: absolute; left: -1px; bottom: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.2s ease-out forwards; z-index: 100; }
 @keyframes lineGrow { to { height: 100%; } }
 
-.intro-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 101; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-.intro-wrap.revealed .intro-center { opacity: 0; pointer-events: none; }
+.intro-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 101; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.intro-wrap.revealed .intro-center { opacity: 0; }
 
-.intro-monogram { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--gold); letter-spacing: 12px; margin-bottom: 20px; }
-.enter-prompt { 
-    font-size: 10px; color: var(--white); letter-spacing: 6px; text-transform: uppercase; 
-    opacity: 0; animation: fadeInDelayed 1s 1.5s forwards, pulse 2s 2.5s infinite; 
+.intro-monogram { 
+    font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--gold); 
+    letter-spacing: 12px; background: var(--dark); padding: 20px; position: relative; z-index: 102;
+    animation: monogramPulse 1.5s ease-in-out forwards;
 }
-
-@keyframes fadeInDelayed { from { opacity: 0; transform: translateY(10px); } to { opacity: 0.4; transform: translateY(0); } }
-@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+@keyframes monogramPulse { 0% { opacity: 0; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 1; } }
 
 /* --- CONTENT --- */
 .container { width: 100%; max-width: 440px; position: relative; z-index: 10; opacity: 0; transform: translateY(30px); transition: 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -135,7 +134,6 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
     <div class="intro-panel intro-panel-right"></div>
     <div class="intro-center">
         <span class="intro-monogram">AF</span>
-        <span class="enter-prompt">Press to Enter</span>
     </div>
 </div>
 
@@ -161,7 +159,7 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    <p>I design and build custom websites that not only look great, but help turn visitors into customers. Whether it's a landing page for your family restaurant or a full e-commerce store. Every project is carefully hand-coded, phone-friendly, and optimized for your needs.</p>
+                    <p>I design and build custom websites that not only look great, but help turn visitors into customers. Every project is carefully hand-coded, phone-friendly, and optimized for your needs.</p>
                     <p style="margin-top:12px;"><span class="highlight">Expertise:</span> Business sites, Shopify ecosystems, Booking systems, and AI-powered automation tools.</p>
                 </div>
             </div>
@@ -244,38 +242,33 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. EMAIL
     const u = 'ant5ferg', d = 'gmail.com';
     document.getElementById('emailLink').href = 'mai' + 'lto:' + u + '@' + d;
 
-    // 2. INTRO TRIGGER
     const intro = document.getElementById('introWrap');
     const container = document.getElementById('mainContainer');
     const sections = document.querySelectorAll('.section');
 
-    const triggerReveal = () => {
-        if (intro.classList.contains('revealed')) return;
-        intro.classList.add('revealed');
-        container.classList.add('active');
-        sections.forEach((s, i) => {
-            setTimeout(() => s.classList.add('reveal'), 300 + (i * 150));
-        });
-        setTimeout(() => intro.style.display = 'none', 1500);
-    };
-
-    // Check session
-    if (sessionStorage.getItem('af_entered')) {
+    // AUTO REVEAL LOGIC
+    const hasVisited = sessionStorage.getItem('af_auto_reveal');
+    
+    if (hasVisited) {
         intro.style.display = 'none';
         container.classList.add('active');
         sections.forEach(s => s.classList.add('reveal'));
     } else {
-        intro.addEventListener('click', () => {
-            triggerReveal();
-            sessionStorage.setItem('af_entered', 'true');
-        });
+        setTimeout(() => {
+            intro.classList.add('revealed');
+            container.classList.add('active');
+            sections.forEach((s, i) => {
+                setTimeout(() => s.classList.add('reveal'), 400 + (i * 150));
+            });
+            sessionStorage.setItem('af_auto_reveal', 'true');
+            setTimeout(() => intro.style.display = 'none', 1500);
+        }, 2200); // Wait for line animation and pulse to complete
     }
 
-    // 3. CURSOR & PARALLAX
+    // CURSOR & PARALLAX
     const dot = document.getElementById('dot');
     const outline = document.getElementById('outline');
     const orb1 = document.getElementById('orb1');
@@ -285,15 +278,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const { clientX: x, clientY: y } = e;
         dot.style.left = `${x}px`; dot.style.top = `${y}px`;
         outline.style.left = `${x}px`; outline.style.top = `${y}px`;
-
         const moveX = (x - window.innerWidth / 2) * 0.05;
         const moveY = (y - window.innerHeight / 2) * 0.05;
         orb1.style.transform = `translate(${moveX}px, ${moveY}px)`;
         orb2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
     });
 
-    // Cursor behavior
-    const interactive = document.querySelectorAll('.card-header, .link-card, .intro-wrap, a');
+    const interactive = document.querySelectorAll('.card-header, .link-card, a');
     interactive.forEach(el => {
         el.addEventListener('mouseenter', () => {
             outline.style.width = '60px'; outline.style.height = '60px'; outline.style.opacity = '1';
@@ -305,7 +296,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. ACCORDION
     document.querySelectorAll('.card-header').forEach(header => {
         header.addEventListener('click', () => {
             const card = header.parentElement;
