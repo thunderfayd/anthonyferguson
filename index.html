@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anthony Ferguson</title>
+<title>A Future — Anthony Ferguson</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -86,7 +86,6 @@
   .intro-wrap.revealed .intro-panel-left { transform: translateX(-100%); }
   .intro-wrap.revealed .intro-panel-right { transform: translateX(100%); }
 
-  /* Gold line on each panel edge */
   .intro-panel-left::after {
     content: ''; position: absolute; right: -0.5px; top: 0;
     width: 1px; height: 0; background: var(--gold);
@@ -99,7 +98,6 @@
   }
   @keyframes panelLineGrow { to { height: 100%; } }
 
-  /* Center emblem layer */
   .intro-center {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
@@ -139,24 +137,25 @@
 
   /* ── Header ── */
   .header { text-align: center; margin-bottom: 52px; }
-  .monogram-wrap { position: relative; display: inline-block; margin-bottom: 28px; }
-  .monogram {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 76px; height: 76px;
-    border: 1px solid var(--gold); border-radius: 50%; position: relative;
-  }
-  .monogram span {
+
+  .brand-logo {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 26px; font-weight: 400; color: var(--gold); letter-spacing: 3px;
+    font-size: 15px; font-weight: 400; color: var(--gold);
+    letter-spacing: 10px; text-transform: uppercase;
+    margin-bottom: 24px;
+    position: relative;
+    display: inline-block;
   }
-  .monogram::after {
-    content: ''; position: absolute; inset: -8px;
-    border: 0.5px solid rgba(201,168,76,0.2); border-radius: 50%;
+  .brand-logo::before,
+  .brand-logo::after {
+    content: '';
+    position: absolute; top: 50%;
+    width: 30px; height: 0.5px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4));
   }
-  .monogram-glow {
-    position: absolute; inset: -24px; border-radius: 50%;
-    background: radial-gradient(circle, var(--gold-glow), transparent 70%); z-index: -1;
-  }
+  .brand-logo::before { right: calc(100% + 14px); }
+  .brand-logo::after { left: calc(100% + 14px); transform: scaleX(-1); }
+
   h1 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 36px; font-weight: 300; color: var(--white);
@@ -295,6 +294,26 @@
     line-height: 1.7; letter-spacing: 0.3px;
   }
 
+  /* ── Extended resume link ── */
+  .resume-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 18px; padding-top: 14px;
+    border-top: 0.5px solid rgba(201,168,76,0.08);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .resume-link span {
+    font-size: 11px; font-weight: 400; color: var(--gold);
+    letter-spacing: 2px; text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+  .resume-link .resume-link-arrow {
+    font-size: 14px; color: var(--gold);
+    transition: transform 0.3s ease;
+  }
+  .resume-link:hover span { color: var(--white); }
+  .resume-link:hover .resume-link-arrow { transform: translateX(4px); }
+
   /* ── Simple link cards (connect) ── */
   .link-card {
     display: flex; align-items: center; justify-content: space-between;
@@ -353,6 +372,7 @@
 
   @media (max-width: 480px) {
     h1 { font-size: 28px; letter-spacing: 5px; }
+    .intro-center .intro-title { font-size: 32px; letter-spacing: 10px; }
     .card-header { padding: 16px 20px; }
     .card-content { padding: 0 20px 18px 20px; }
     .link-card { padding: 16px 20px; }
@@ -385,10 +405,7 @@
 <div class="container">
 
   <div class="header">
-    <div class="monogram-wrap">
-      <div class="monogram-glow"></div>
-      <div class="monogram"><span>AF</span></div>
-    </div>
+    <div class="brand-logo">A Future</div>
     <h1>Anthony<br>Ferguson</h1>
     <p class="tagline">Developer · Creative</p>
     <div class="divider"></div>
@@ -405,9 +422,7 @@
         </div>
         <div class="card-body">
           <div class="card-content">
-            <p>I design and build custom websites that not only look great, but help turn visitors into customers. Whether it’s a landing page for your family resturant or a full e-commerce store. Every project is carefully hand-coded, phone-friendly, and optimized for your needs.
-
-</p>
+            <p>I design and build custom websites that not only look great, but help turn visitors into customers. Whether it's a landing page for your family resturant or a full e-commerce store. Every project is carefully hand-coded, phone-friendly, and optimized for your needs.</p>
             <p><span class="highlight">What I build:</span> Business sites, portfolios, Shopify stores, booking pages, dashboards, and AI-powered web tools.</p>
           </div>
         </div>
@@ -479,9 +494,13 @@ Experience in Marketing (Music Industry) and venue experience.</span>
               </div>
               <div class="resume-row">
                 <span class="resume-label">Notable</span>
-                <span class="resume-value">I’m genuinely passionate about helping businesses grow and thrive. I bring a positive, forward-thinking mindset to every project and love turning ideas into something impactful.</span>
+                <span class="resume-value">I'm genuinely passionate about helping businesses grow and thrive. I bring a positive, forward-thinking mindset to every project and love turning ideas into something impactful.</span>
               </div>
             </div>
+            <a class="resume-link" href="https://docs.google.com/document/d/1Qo79HaJ3PCIA-Fp1Y9rJhVgpwsE6NXTojb_pCgo57lU/edit?tab=t.0#heading=h.aagfqklm9zwt" target="_blank" rel="noopener">
+              <span>View Extended Résumé</span>
+              <span class="resume-link-arrow">→</span>
+            </a>
           </div>
         </div>
       </div>
@@ -492,15 +511,15 @@ Experience in Marketing (Music Industry) and venue experience.</span>
   <div class="section s4">
     <div class="section-label">Connect</div>
     <div class="cards">
-      <a class="link-card" href="#">
+      <a class="link-card" href="https://calendly.com/ant5ferg/new-meeting" target="_blank" rel="noopener">
         <span class="link-text">Book a Meeting</span>
         <span class="link-arrow">→</span>
       </a>
-      <a class="link-card" href="/cdn-cgi/l/email-protection#6a0b041e020504132a0f120b071a060f44090507">
+      <a class="link-card" href="mailto:ant5ferg@gmail.com">
         <span class="link-text">Email</span>
         <span class="link-arrow">→</span>
       </a>
-      <a class="link-card" href="https://www.instagram.com/af.mp3/">
+      <a class="link-card" href="https://www.instagram.com/af.mp3/" target="_blank" rel="noopener">
         <span class="link-text">Instagram</span>
         <span class="link-arrow">→</span>
       </a>
@@ -515,7 +534,7 @@ Experience in Marketing (Music Industry) and venue experience.</span>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Split the doors open after monogram reveal
+    // Split the doors open after AF reveal
     setTimeout(function() {
       document.getElementById('introWrap').classList.add('revealed');
     }, 2000);
