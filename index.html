@@ -48,28 +48,27 @@ body {
 .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%); top: -15%; left: -10%; }
 .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(201,168,76,0.1), transparent 70%); bottom: -10%; right: -5%; }
 
-/* --- AUTO-INTRO --- */
+/* --- CLEAN INTRO --- */
 .intro-wrap { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
 .intro-panel { position: absolute; top: 0; width: 50%; height: 100%; background: var(--dark); transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1); }
-.intro-panel-left { left: 0; border-right: 0.5px solid var(--border); }
-.intro-panel-right { right: 0; border-left: 0.5px solid var(--border); }
+.intro-panel-left { left: 0; }
+.intro-panel-right { right: 0; }
 .intro-wrap.revealed .intro-panel-left { transform: translateX(-100%); }
 .intro-wrap.revealed .intro-panel-right { transform: translateX(100%); }
-
-/* Drawing Line Effect */
-.intro-panel-left::after { content:''; position: absolute; right: -1px; top: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.2s ease-out forwards; z-index: 100; }
-.intro-panel-right::before { content:''; position: absolute; left: -1px; bottom: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.2s ease-out forwards; z-index: 100; }
-@keyframes lineGrow { to { height: 100%; } }
 
 .intro-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 101; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
 .intro-wrap.revealed .intro-center { opacity: 0; }
 
 .intro-monogram { 
     font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--gold); 
-    letter-spacing: 12px; background: var(--dark); padding: 20px; position: relative; z-index: 102;
-    animation: monogramPulse 1.5s ease-in-out forwards;
+    letter-spacing: 12px; position: relative; z-index: 102;
+    animation: monogramFade 1.8s ease-in-out forwards;
 }
-@keyframes monogramPulse { 0% { opacity: 0; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 1; } }
+@keyframes monogramFade { 
+    0% { opacity: 0; transform: scale(0.98); } 
+    40% { opacity: 1; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1); } 
+}
 
 /* --- CONTENT --- */
 .container { width: 100%; max-width: 440px; position: relative; z-index: 10; opacity: 0; transform: translateY(30px); transition: 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -85,10 +84,10 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
 .gold-text { background: linear-gradient(to right, #fff 20%, var(--gold) 40%, var(--gold) 60%, #fff 80%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 5s linear infinite; }
 @keyframes shine { to { background-position: 200% center; } }
 
-.tagline { font-size: 11px; color: var(--gray-light); letter-spacing: 5px; text-transform: uppercase; opacity: 0.7; }
+.tagline { font-size: 11px; color: var(--white-dim); letter-spacing: 5px; text-transform: uppercase; opacity: 0.7; }
 .divider { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 25px auto 0; }
 
-/* --- CARDS & ACCORDION --- */
+/* --- CARDS & SECTIONS --- */
 .section { margin-bottom: 40px; opacity: 0; transform: translateY(20px); transition: 0.8s ease; }
 .section.reveal { opacity: 1; transform: translateY(0); }
 .section-label { font-size: 10px; font-weight: 500; color: var(--gold); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; display: block; }
@@ -185,18 +184,6 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Upcoming Shows</span>
-                <span class="card-icon">+</span>
-            </div>
-            <div class="card-body">
-                <div class="card-content">
-                    <div style="font-family:'Cormorant Garamond',serif; font-size:24px; color:var(--white)">May 8, 2026</div>
-                    <p style="font-family:'Cormorant Garamond', serif; font-style:italic; opacity:0.5; margin-top:10px">Artists to be announced</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="section">
@@ -208,9 +195,8 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    <div class="resume-row"><span class="res-label">Experience</span><span style="font-size:13px">5+ years in IT &mdash; enterprise SharePoint administration, Power BI, digital transformation, and process automation. Marketing & Venue experience.</span></div>
+                    <div class="resume-row"><span class="res-label">Experience</span><span style="font-size:13px">5+ years in IT &mdash; enterprise SharePoint administration, Power BI, and digital transformation.</span></div>
                     <div class="resume-row"><span class="res-label">Education</span><span style="font-size:13px">IT Major &mdash; University of Wisconsin-Milwaukee (Sophomore)</span></div>
-                    <div class="resume-row"><span class="res-label">Tools</span><span style="font-size:13px">Python &middot; React &middot; Adobe Suite &middot; Microsoft 365 &middot; AI Integration</span></div>
                     <a href="https://docs.google.com/document/d/1Qo79HaJ3PCIA-Fp1Y9rJhVgpwsE6NXTojb_pCgo57lU/edit?tab=t.0#heading=h.aagfqklm9zwt" target="_blank" style="display:flex; align-items:center; gap:10px; margin-top:25px; text-decoration:none; color:var(--gold); font-size:11px; letter-spacing:2px; padding-top:15px; border-top:1px solid rgba(201,168,76,0.1); text-transform:uppercase;">
                         <span>Extended R&eacute;sum&eacute;</span> <span>&rarr;</span>
                     </a>
@@ -249,26 +235,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('mainContainer');
     const sections = document.querySelectorAll('.section');
 
-    // AUTO REVEAL LOGIC
-    const hasVisited = sessionStorage.getItem('af_auto_reveal');
-    
-    if (hasVisited) {
-        intro.style.display = 'none';
+    // Simple Auto Reveal
+    setTimeout(() => {
+        intro.classList.add('revealed');
         container.classList.add('active');
-        sections.forEach(s => s.classList.add('reveal'));
-    } else {
-        setTimeout(() => {
-            intro.classList.add('revealed');
-            container.classList.add('active');
-            sections.forEach((s, i) => {
-                setTimeout(() => s.classList.add('reveal'), 400 + (i * 150));
-            });
-            sessionStorage.setItem('af_auto_reveal', 'true');
-            setTimeout(() => intro.style.display = 'none', 1500);
-        }, 2200); // Wait for line animation and pulse to complete
-    }
+        sections.forEach((s, i) => {
+            setTimeout(() => s.classList.add('reveal'), 400 + (i * 150));
+        });
+        setTimeout(() => intro.style.display = 'none', 1500);
+    }, 1800);
 
-    // CURSOR & PARALLAX
+    // Cursor & Parallax
     const dot = document.getElementById('dot');
     const outline = document.getElementById('outline');
     const orb1 = document.getElementById('orb1');
@@ -284,8 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         orb2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
     });
 
-    const interactive = document.querySelectorAll('.card-header, .link-card, a');
-    interactive.forEach(el => {
+    document.querySelectorAll('.card-header, .link-card, a').forEach(el => {
         el.addEventListener('mouseenter', () => {
             outline.style.width = '60px'; outline.style.height = '60px'; outline.style.opacity = '1';
             outline.style.background = 'rgba(201,168,76,0.1)';
