@@ -4,140 +4,137 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A Future &mdash; Anthony Ferguson</title>
-<meta property="og:title" content="A Future — Anthony Ferguson">
-<meta property="og:description" content="Developer · Creative">
-<meta property="og:image" content="https://afuture.net/preview.png">
-<meta property="og:url" content="https://afuture.net">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
-/* --- CORE STYLES & RESET --- */
 :root {
     --white: #FAFAF8;
     --white-dim: rgba(250, 250, 248, 0.6);
     --gold: #C9A84C;
-    --gold-glow: rgba(201, 168, 76, 0.15);
-    --gold-soft: rgba(201, 168, 76, 0.06);
-    --dark: #0E0E0E;
+    --gold-bright: #ffdf8c;
+    --gold-glow: rgba(201, 168, 76, 0.25);
+    --gold-soft: rgba(201, 168, 76, 0.08);
+    --dark: #0A0A0A;
     --dark-card: rgba(255, 255, 255, 0.02);
-    --gray: #777;
-    --gray-light: #999;
-    --border: rgba(201, 168, 76, 0.12);
-    --border-hover: rgba(201, 168, 76, 0.35);
+    --border: rgba(201, 168, 76, 0.15);
+    --border-hover: rgba(201, 168, 76, 0.45);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; } /* Hide default cursor */
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
 body {
     background: var(--dark);
     font-family: 'Outfit', sans-serif;
+    color: var(--white);
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    padding: 50px 20px;
+    padding: 60px 20px;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
 }
 
-/* --- THE WOW: OVERLAYS & CURSOR --- */
-.noise-overlay {
-    position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+/* --- THE CINEMATIC LAYER --- */
+.noise {
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.cursor-dot {
-    width: 8px; height: 8px; background: var(--gold); border-radius: 50%;
-    position: fixed; pointer-events: none; z-index: 10000; transition: transform 0.1s ease-out;
-    transform: translate(-50%, -50%);
-}
+.cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; transition: transform 0.1s; transform: translate(-50%, -50%); }
+.cursor-outline { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1); transform: translate(-50%, -50%); opacity: 0.3; }
 
-.cursor-outline {
-    width: 40px; height: 40px; border: 1px solid var(--gold); border-radius: 50%;
-    position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.2s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
-    transform: translate(-50%, -50%); opacity: 0.4;
-}
+/* --- BACKGROUND --- */
+.bg { position: fixed; inset: 0; z-index: 0; }
+.orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5; transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+.orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%); top: -15%; left: -10%; }
+.orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(201,168,76,0.1), transparent 70%); bottom: -10%; right: -5%; }
 
-/* --- DYNAMIC BACKGROUND --- */
-.bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
-.orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.6; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(201,168,76,0.12), transparent 70%); top: -8%; left: -8%; }
-.orb-2 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%); bottom: -5%; right: -8%; }
-
-/* --- INTRO PANEL --- */
+/* --- INTRO PANELS (RESTORED & ENHANCED) --- */
 .intro-wrap { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
-.intro-panel { position: absolute; top: 0; width: 50%; height: 100%; background: var(--dark); transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1); border: 0.5px solid rgba(201,168,76,0.1); }
-.intro-panel-left { left: 0; }
-.intro-panel-right { right: 0; }
+.intro-panel { position: absolute; top: 0; width: 50%; height: 100%; background: var(--dark); transition: transform 1.1s cubic-bezier(0.85, 0, 0.15, 1); }
+.intro-panel-left { left: 0; border-right: 0.5px solid var(--border); }
+.intro-panel-right { right: 0; border-left: 0.5px solid var(--border); }
 .intro-wrap.revealed .intro-panel-left { transform: translateX(-100%); }
 .intro-wrap.revealed .intro-panel-right { transform: translateX(100%); }
-.intro-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 101; transition: opacity 0.4s ease; }
-.intro-wrap.revealed .intro-center { opacity: 0; }
-.intro-monogram { font-family: 'Cormorant Garamond', serif; font-size: 52px; color: var(--gold); letter-spacing: 10px; }
 
-/* --- CONTENT REVEAL --- */
-.container { width: 100%; max-width: 440px; position: relative; z-index: 1; opacity: 0; transform: translateY(30px); transition: all 1s ease; }
+/* The "Growing Line" effect from your original */
+.intro-panel-left::after { content:''; position: absolute; right: -1px; top: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.4s ease-out forwards; }
+.intro-panel-right::before { content:''; position: absolute; left: -1px; bottom: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.4s ease-out forwards; }
+@keyframes lineGrow { to { height: 100%; } }
+
+.intro-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 101; transition: opacity 0.5s; }
+.intro-wrap.revealed .intro-center { opacity: 0; }
+.intro-monogram { font-family: 'Cormorant Garamond', serif; font-size: 58px; font-weight: 300; color: var(--gold); letter-spacing: 12px; text-shadow: 0 0 20px var(--gold-glow); }
+
+/* --- HEADER --- */
+.container { width: 100%; max-width: 440px; position: relative; z-index: 10; opacity: 0; transform: translateY(30px); transition: 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .container.active { opacity: 1; transform: translateY(0); }
 
-/* --- ORIGINAL STYLING PRESERVED --- */
-.header { text-align: center; margin-bottom: 52px; }
-.brand-logo { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: var(--gold); letter-spacing: 10px; text-transform: uppercase; margin-bottom: 24px; display: inline-block; position: relative; }
-.brand-logo::before, .brand-logo::after { content:''; position: absolute; top: 50%; width: 30px; height: 0.5px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4)); }
-.brand-logo::before { right: calc(100% + 14px); }
-.brand-logo::after { left: calc(100% + 14px); transform: scaleX(-1); }
+.header { text-align: center; margin-bottom: 60px; }
+.brand-logo { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: var(--gold); letter-spacing: 10px; text-transform: uppercase; margin-bottom: 24px; position: relative; display: inline-block; }
+.brand-logo::before, .brand-logo::after { content:''; position: absolute; top: 50%; width: 35px; height: 0.5px; background: linear-gradient(90deg, transparent, var(--gold)); }
+.brand-logo::before { right: calc(100% + 15px); }
+.brand-logo::after { left: calc(100% + 15px); transform: scaleX(-1); }
 
-h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--white); letter-spacing: 8px; text-transform: uppercase; line-height: 1.3; }
-.tagline { font-size: 11px; font-weight: 300; color: var(--gray); letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; }
-.divider { width: 40px; height: 0.5px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 22px auto 0; }
+h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; letter-spacing: 6px; text-transform: uppercase; line-height: 1.1; margin-bottom: 12px; }
+.gold-text { background: linear-gradient(to right, #fff 20%, var(--gold) 40%, var(--gold) 60%, #fff 80%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 5s linear infinite; }
+@keyframes shine { to { background-position: 200% center; } }
 
-.section { margin-bottom: 36px; opacity: 0; transform: translateY(16px); transition: 0.7s ease-out; }
+.tagline { font-size: 11px; color: var(--gray-light); letter-spacing: 5px; text-transform: uppercase; opacity: 0.7; }
+.divider { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 25px auto 0; }
+
+/* --- SECTIONS & CARDS --- */
+.section { margin-bottom: 40px; opacity: 0; transform: translateY(20px); transition: 0.8s ease; }
 .section.reveal { opacity: 1; transform: translateY(0); }
+.section-label { font-size: 10px; font-weight: 500; color: var(--gold); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; display: block; }
 
-.section-label { font-size: 9px; font-weight: 500; color: var(--gold); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 14px; }
-.card { background: var(--dark-card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: 0.4s; backdrop-filter: blur(10px); }
-.card:hover, .card.open { border-color: var(--border-hover); box-shadow: 0 4px 30px rgba(201,168,76,0.05); }
-.card-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; cursor: pointer; position: relative; transition: 0.3s; }
-.card-header:hover { background: var(--gold-soft); }
-.card-title { font-size: 13px; font-weight: 300; color: var(--white); letter-spacing: 2px; text-transform: uppercase; }
-.card-icon { font-size: 18px; color: var(--gold); transition: 0.4s; opacity: 0.6; }
+.card { 
+    background: var(--dark-card); 
+    border: 1px solid var(--border); 
+    border-radius: 4px; 
+    overflow: hidden; 
+    transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    backdrop-filter: blur(20px); 
+    position: relative;
+}
+
+.card-header { padding: 22px 26px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; position: relative; }
+.card-header::after { content:''; position: absolute; left: 0; top: 0; width: 2px; height: 100%; background: var(--gold); transform: scaleY(0); transition: 0.4s; transform-origin: bottom; }
+.card:hover .card-header::after, .card.open .card-header::after { transform: scaleY(1); }
+.card:hover { border-color: var(--border-hover); box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.05); }
+
+.card-title { font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 300; color: var(--white); }
+.card-icon { color: var(--gold); transition: 0.4s; font-size: 18px; opacity: 0.6; }
 .card.open .card-icon { transform: rotate(45deg); opacity: 1; }
-.card-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+.card-body { max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
 .card.open .card-body { max-height: 800px; }
-.card-content { padding: 0 24px 22px 24px; border-top: 0.5px solid rgba(201,168,76,0.08); font-size: 12.5px; line-height: 1.8; color: var(--white-dim); }
+.card-content { padding: 0 26px 26px; border-top: 1px solid rgba(201,168,76,0.08); font-size: 13.5px; line-height: 1.8; color: var(--white-dim); }
 
-/* EVENT STYLES */
-.event-date { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--white); margin-top: 16px; }
-.event-artists { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
-.artist-tag { font-size: 10px; padding: 6px 14px; border: 0.5px solid rgba(201,168,76,0.25); border-radius: 2px; color: var(--white-dim); background: rgba(201,168,76,0.04); text-transform: uppercase; letter-spacing: 1px; }
+/* --- SPECIFIC CONTENT STYLES --- */
+.highlight { color: var(--gold); font-weight: 400; }
+.event-date { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--white); margin-top: 18px; letter-spacing: 1px; }
+.artist-tag { font-size: 10px; padding: 7px 15px; border: 1px solid rgba(201,168,76,0.2); border-radius: 2px; color: var(--white-dim); background: rgba(201,168,76,0.05); text-transform: uppercase; letter-spacing: 1.5px; display: inline-block; margin: 8px 6px 0 0; }
 
-/* RESUME GRID STYLES */
-.resume-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
-.resume-row { display: flex; align-items: flex-start; gap: 12px; }
-.resume-label { font-size: 9px; font-weight: 500; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; min-width: 72px; padding-top: 2px; }
-.resume-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding-top: 14px; border-top: 0.5px solid rgba(201,168,76,0.08); text-decoration: none; }
-.resume-link span { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
-.resume-link:hover span { color: var(--white); }
+.resume-row { display: flex; margin-top: 15px; gap: 15px; }
+.res-label { font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; min-width: 80px; padding-top: 3px; }
+.resume-link { display: flex; align-items: center; gap: 10px; margin-top: 25px; text-decoration: none; color: var(--gold); text-transform: uppercase; font-size: 11px; letter-spacing: 2px; padding-top: 15px; border-top: 1px solid rgba(201,168,76,0.1); }
+.resume-link:hover { color: var(--white); }
 
-/* CONNECT CARDS */
-.link-card { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; background: var(--dark-card); border: 1px solid var(--border); border-radius: 4px; text-decoration: none; color: var(--white); margin-bottom: 10px; transition: 0.4s; position: relative; overflow: hidden; }
-.link-card:hover { border-color: var(--border-hover); transform: translateX(6px); background: var(--gold-soft); }
-.link-text { font-size: 13px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; }
+.link-card { display: flex; justify-content: space-between; align-items: center; padding: 20px 26px; background: var(--dark-card); border: 1px solid var(--border); text-decoration: none; color: var(--white); margin-bottom: 12px; transition: 0.4s; position: relative; overflow: hidden; }
+.link-card:hover { border-color: var(--white); padding-left: 32px; background: var(--gold-soft); }
 
-.footer { text-align: center; margin-top: 52px; padding-top: 24px; border-top: 0.5px solid rgba(201,168,76,0.1); }
-.footer-text { font-size: 9px; color: rgba(255,255,255,0.2); letter-spacing: 3px; text-transform: uppercase; }
-
-@media(max-width:480px){
+@media(max-width: 480px) {
     * { cursor: auto; }
     .cursor-dot, .cursor-outline { display: none; }
-    h1 { font-size: 28px; }
-    .resume-row { flex-direction: column; gap: 4px; }
+    h1 { font-size: 32px; }
+    .resume-row { flex-direction: column; gap: 5px; }
 }
 </style>
 </head>
 <body>
 
-<div class="noise-overlay"></div>
+<div class="noise"></div>
 <div class="cursor-dot" id="dot"></div>
 <div class="cursor-outline" id="outline"></div>
 
@@ -155,15 +152,15 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300
 </div>
 
 <div class="container" id="mainContainer">
-    <div class="header">
+    <header class="header">
         <div class="brand-logo">A Future</div>
-        <h1>Anthony<br>Ferguson</h1>
+        <h1 class="gold-text">Anthony<br>Ferguson</h1>
         <p class="tagline">Developer &middot; Creative</p>
         <div class="divider"></div>
-    </div>
+    </header>
 
     <div class="section">
-        <div class="section-label">Services</div>
+        <span class="section-label">Services</span>
         <div class="card">
             <div class="card-header">
                 <span class="card-title">Web Design &amp; Development</span>
@@ -171,16 +168,16 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    <p>I design and build custom websites that not only look great, but help turn visitors into customers. Whether it's a landing page for your family restaurant or a full e-commerce store. Every project is carefully hand-coded, phone-friendly, and optimized for your needs.</p>
-                    <p style="margin-top:10px;"><span style="color:var(--gold)">What I build:</span> Business sites, portfolios, Shopify stores, booking pages, dashboards, and AI-powered web tools.</p>
+                    <p>I design and build custom websites that not only look great, but help turn visitors into customers. Every project is carefully hand-coded, phone-friendly, and optimized for your needs.</p>
+                    <p style="margin-top:12px;"><span class="highlight">Expertise:</span> Business sites, Shopify ecosystems, Booking systems, and AI-powered automation tools.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="section">
-        <div class="section-label">3005</div>
-        <div class="card" style="margin-bottom:10px">
+        <span class="section-label">3005</span>
+        <div class="card" style="margin-bottom:12px">
             <div class="card-header">
                 <span class="card-title">Venue &amp; Events</span>
                 <span class="card-icon">+</span>
@@ -188,8 +185,8 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300
             <div class="card-body">
                 <div class="card-content">
                     <div class="event-date">April 3, 2026</div>
-                    <div style="font-size:11.5px; color:var(--gray-light); margin-top:4px;">Live music at 3005</div>
-                    <div class="event-artists">
+                    <p style="font-size:12px; opacity:0.6">Live music at 3005</p>
+                    <div style="margin-top:10px">
                         <span class="artist-tag">The Precipitators</span>
                         <span class="artist-tag">Mural Hall</span>
                         <span class="artist-tag">aWannabe</span>
@@ -205,15 +202,14 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300
             <div class="card-body">
                 <div class="card-content">
                     <div class="event-date">May 8, 2026</div>
-                    <div style="font-size:11.5px; color:var(--gray-light); margin-top:4px;">Live at 3005</div>
-                    <p style="font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--gray); margin-top:8px;">Artists to be announced</p>
+                    <p style="font-family:'Cormorant Garamond', serif; font-style:italic; opacity:0.5; margin-top:10px">Artists to be announced</p>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="section">
-        <div class="section-label">R&eacute;sum&eacute;</div>
+        <span class="section-label">R&eacute;sum&eacute;</span>
         <div class="card">
             <div class="card-header">
                 <span class="card-title">Qualifications</span>
@@ -221,27 +217,11 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    <div class="resume-grid">
-                        <div class="resume-row">
-                            <span class="resume-label">Experience</span>
-                            <span class="resume-value">5+ years in IT &mdash; enterprise SharePoint administration, Power BI dashboard development, digital workplace transformation, and process automation at a multi-state manufacturing company. Experience in Marketing (Music Industry) and venue experience.</span>
-                        </div>
-                        <div class="resume-row">
-                            <span class="resume-label">Education</span>
-                            <span class="resume-value">IT Major &mdash; University of Wisconsin-Milwaukee (Sophomore)</span>
-                        </div>
-                        <div class="resume-row">
-                            <span class="resume-label">Tools</span>
-                            <span class="resume-value">SharePoint &middot; Power BI &middot; Microsoft 365 &middot; Adobe Suite &middot; HTML/CSS/JS &middot; Python &middot; React &middot; AI/LLM Integration</span>
-                        </div>
-                        <div class="resume-row">
-                            <span class="resume-label">Notable</span>
-                            <span class="resume-value">I'm genuinely passionate about helping businesses grow and thrive. I bring a positive, forward-thinking mindset to every project and love turning ideas into something impactful.</span>
-                        </div>
-                    </div>
+                    <div class="resume-row"><span class="res-label">Experience</span><span style="font-size:13px">5+ years in IT &mdash; enterprise SharePoint administration, Power BI, digital transformation, and process automation. Marketing & Venue experience.</span></div>
+                    <div class="resume-row"><span class="res-label">Education</span><span style="font-size:13px">IT Major &mdash; University of Wisconsin-Milwaukee (Sophomore)</span></div>
+                    <div class="resume-row"><span class="res-label">Tools</span><span style="font-size:13px">Python &middot; React &middot; Adobe Suite &middot; Microsoft 365 &middot; AI Integration</span></div>
                     <a class="resume-link" href="https://docs.google.com/document/d/1Qo79HaJ3PCIA-Fp1Y9rJhVgpwsE6NXTojb_pCgo57lU/edit?tab=t.0#heading=h.aagfqklm9zwt" target="_blank">
-                        <span>View Extended R&eacute;sum&eacute;</span>
-                        <span style="font-size:14px">&rarr;</span>
+                        <span>Extended R&eacute;sum&eacute;</span> <span>&rarr;</span>
                     </a>
                 </div>
             </div>
@@ -249,37 +229,37 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300
     </div>
 
     <div class="section">
-        <div class="section-label">Connect</div>
+        <span class="section-label">Connect</span>
         <a class="link-card" href="https://calendly.com/ant5ferg/new-meeting" target="_blank">
-            <span class="link-text">Book a Meeting</span>
+            <span style="font-size:13px; letter-spacing:2px; text-transform:uppercase">Book a Meeting</span>
             <span style="color:var(--gold)">&rarr;</span>
         </a>
         <a class="link-card" id="emailLink" href="#">
-            <span class="link-text">Email</span>
+            <span style="font-size:13px; letter-spacing:2px; text-transform:uppercase">Email</span>
             <span style="color:var(--gold)">&rarr;</span>
         </a>
         <a class="link-card" href="https://www.instagram.com/af.mp3/" target="_blank">
-            <span class="link-text">Instagram</span>
+            <span style="font-size:13px; letter-spacing:2px; text-transform:uppercase">Instagram</span>
             <span style="color:var(--gold)">&rarr;</span>
         </a>
     </div>
 
-    <div class="footer">
-        <p class="footer-text">&copy; 2026 Anthony Ferguson</p>
-    </div>
+    <footer style="text-align:center; margin-top:60px; border-top:1px solid rgba(201,168,76,0.1); padding-top:30px">
+        <p style="font-size:9px; letter-spacing:3px; opacity:0.3; text-transform:uppercase">&copy; 2026 Anthony Ferguson</p>
+    </footer>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. EMAIL PROTECTOR
+    // 1. EMAIL PROTECTION
     const u = 'ant5ferg', d = 'gmail.com';
     document.getElementById('emailLink').href = 'mai' + 'lto:' + u + '@' + d;
 
-    // 2. SESSION-BASED INTRO
+    // 2. SMART INTRO
     const intro = document.getElementById('introWrap');
     const container = document.getElementById('mainContainer');
     const sections = document.querySelectorAll('.section');
-    const hasVisited = sessionStorage.getItem('visited_af');
+    const hasVisited = sessionStorage.getItem('visited_af_premium');
 
     if (hasVisited) {
         intro.style.display = 'none';
@@ -292,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sections.forEach((s, i) => {
                 setTimeout(() => s.classList.add('reveal'), 400 + (i * 150));
             });
-            sessionStorage.setItem('visited_af', 'true');
+            sessionStorage.setItem('visited_af_premium', 'true');
         }, 2200);
     }
 
@@ -304,42 +284,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('mousemove', (e) => {
         const { clientX: x, clientY: y } = e;
-        
-        dot.style.left = `${x}px`;
-        dot.style.top = `${y}px`;
-        
-        outline.style.left = `${x}px`;
-        outline.style.top = `${y}px`;
+        dot.style.left = `${x}px`; dot.style.top = `${y}px`;
+        outline.style.left = `${x}px`; outline.style.top = `${y}px`;
 
-        // Subtle Orb Drift
-        const moveX = (x - window.innerWidth / 2) * 0.04;
-        const moveY = (y - window.innerHeight / 2) * 0.04;
+        const moveX = (x - window.innerWidth / 2) * 0.05;
+        const moveY = (y - window.innerHeight / 2) * 0.05;
         orb1.style.transform = `translate(${moveX}px, ${moveY}px)`;
         orb2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
     });
 
-    // Cursor Interactions
-    const hoverables = document.querySelectorAll('.card-header, .link-card, .resume-link');
-    hoverables.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            outline.style.width = '60px';
-            outline.style.height = '60px';
-            outline.style.opacity = '1';
-        });
-        el.addEventListener('mouseleave', () => {
-            outline.style.width = '40px';
-            outline.style.height = '40px';
-            outline.style.opacity = '0.4';
-        });
-    });
-
-    // 4. ACCORDION LOGIC
+    // 4. ACCORDION
     document.querySelectorAll('.card-header').forEach(header => {
         header.addEventListener('click', () => {
             const card = header.parentElement;
             const isOpen = card.classList.contains('open');
             document.querySelectorAll('.card.open').forEach(c => c.classList.remove('open'));
             if (!isOpen) card.classList.add('open');
+        });
+    });
+
+    // Hover effect for cursor
+    const hovers = document.querySelectorAll('.card-header, .link-card, .resume-link');
+    hovers.forEach(h => {
+        h.addEventListener('mouseenter', () => {
+            outline.style.width = '50px';
+            outline.style.height = '50px';
+            outline.style.opacity = '1';
+            outline.style.background = 'rgba(201,168,76,0.1)';
+        });
+        h.addEventListener('mouseleave', () => {
+            outline.style.width = '34px';
+            outline.style.height = '34px';
+            outline.style.opacity = '0.3';
+            outline.style.background = 'transparent';
         });
     });
 });
