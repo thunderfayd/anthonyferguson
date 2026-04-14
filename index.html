@@ -11,12 +11,8 @@
     --white: #FAFAF8;
     --white-dim: rgba(250, 250, 248, 0.6);
     --gold: #C9A84C;
-    --gold-glow: rgba(201, 168, 76, 0.3);
-    --gold-soft: rgba(201, 168, 76, 0.08);
     --dark: #0A0A0A;
-    --dark-card: rgba(255, 255, 255, 0.02);
     --border: rgba(201, 168, 76, 0.15);
-    --border-hover: rgba(201, 168, 76, 0.45);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
@@ -33,157 +29,111 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* --- OVERLAYS --- */
-.noise {
-    position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
+/* --- CURSOR --- */
 .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; transition: transform 0.1s; transform: translate(-50%, -50%); }
 .cursor-outline { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1); transform: translate(-50%, -50%); opacity: 0.3; }
 
-/* --- BACKGROUND --- */
-.bg { position: fixed; inset: 0; z-index: 0; }
-.orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5; transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
-.orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%); top: -15%; left: -10%; }
-.orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(201,168,76,0.1), transparent 70%); bottom: -10%; right: -5%; }
+/* --- INTRO ANIMATION --- */
+.intro-wrap { position: fixed; inset: 0; z-index: 100; pointer-events: none; display: flex; justify-content: center; align-items: center; }
 
-/* --- CINEMATIC SPLIT INTRO --- */
-.intro-wrap { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
-.intro-panel { position: absolute; top: 0; width: 50%; height: 100%; background: var(--dark); transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1); }
-.intro-panel-left { left: 0; border-right: 0.5px solid var(--border); }
-.intro-panel-right { right: 0; border-left: 0.5px solid var(--border); }
+/* The single continuous line */
+.vertical-axis {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 0%;
+    background: var(--gold);
+    transform: translateX(-50%);
+    z-index: 105;
+    animation: lineFullGrow 1s 0.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
 
-/* The Splitting Line Logic */
-.intro-panel-left::after { content:''; position: absolute; right: -1px; top: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.3s ease-out forwards; z-index: 100; }
-.intro-panel-right::before { content:''; position: absolute; left: -1px; bottom: 0; width: 1.5px; height: 0; background: var(--gold); animation: lineGrow 0.8s 0.3s ease-out forwards; z-index: 100; }
+@keyframes lineFullGrow { to { height: 100%; } }
 
-@keyframes lineGrow { to { height: 100%; } }
+.intro-panel { position: absolute; top: 0; width: 50%; height: 100%; background: var(--dark); transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1); z-index: 100; }
+.intro-panel-left { left: 0; }
+.intro-panel-right { right: 0; }
 
 .intro-wrap.revealed .intro-panel-left { transform: translateX(-100%); }
 .intro-wrap.revealed .intro-panel-right { transform: translateX(100%); }
-
-.intro-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 101; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-.intro-wrap.revealed .intro-center { opacity: 0; }
+.intro-wrap.revealed .vertical-axis { opacity: 0; transition: opacity 0.5s; }
 
 .intro-monogram { 
-    font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--gold); 
-    letter-spacing: 12px; background: var(--dark); padding: 20px; position: relative; z-index: 102;
-    animation: monogramFade 1s 0.2s ease-out forwards; opacity: 0;
+    font-family: 'Cormorant Garamond', serif; 
+    font-size: 72px; 
+    font-weight: 300; 
+    color: var(--gold); 
+    letter-spacing: 12px; 
+    position: relative; 
+    z-index: 110;
+    opacity: 0;
+    /* This shadow creates a "gap" in perception without actually cutting the line */
+    text-shadow: 0 0 15px var(--dark), 0 0 10px var(--dark);
+    animation: monogramAppear 1.2s 0.6s ease-out forwards;
 }
-@keyframes monogramFade { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+@keyframes monogramAppear { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
 /* --- CONTENT --- */
 .container { width: 100%; max-width: 440px; position: relative; z-index: 10; opacity: 0; transform: translateY(30px); transition: 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .container.active { opacity: 1; transform: translateY(0); }
 
 .header { text-align: center; margin-bottom: 60px; }
-.brand-logo { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: var(--gold); letter-spacing: 10px; text-transform: uppercase; margin-bottom: 24px; position: relative; display: inline-block; }
-.brand-logo::before, .brand-logo::after { content:''; position: absolute; top: 50%; width: 35px; height: 0.5px; background: linear-gradient(90deg, transparent, var(--gold)); }
-.brand-logo::before { right: calc(100% + 15px); }
-.brand-logo::after { left: calc(100% + 15px); transform: scaleX(-1); }
-
 h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; letter-spacing: 6px; text-transform: uppercase; line-height: 1.1; margin-bottom: 12px; }
 .gold-text { background: linear-gradient(to right, #fff 20%, var(--gold) 40%, var(--gold) 60%, #fff 80%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 5s linear infinite; }
 @keyframes shine { to { background-position: 200% center; } }
 
-.tagline { font-size: 11px; color: var(--white-dim); letter-spacing: 5px; text-transform: uppercase; opacity: 0.7; }
-.divider { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 25px auto 0; }
-
-/* --- CARDS & ACCORDION --- */
 .section { margin-bottom: 40px; opacity: 0; transform: translateY(20px); transition: 0.8s ease; }
 .section.reveal { opacity: 1; transform: translateY(0); }
 .section-label { font-size: 10px; font-weight: 500; color: var(--gold); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; display: block; }
 
-.card { background: var(--dark-card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: 0.4s; backdrop-filter: blur(20px); position: relative; }
-.card-header { padding: 22px 26px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; position: relative; }
-.card-header::after { content:''; position: absolute; left: 0; top: 0; width: 2px; height: 100%; background: var(--gold); transform: scaleY(0); transition: 0.4s; transform-origin: bottom; }
-.card:hover .card-header::after, .card.open .card-header::after { transform: scaleY(1); }
-.card:hover { border-color: var(--border-hover); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-
+.card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: 0.4s; backdrop-filter: blur(20px); }
+.card-header { padding: 22px 26px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 .card-title { font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 300; color: var(--white); }
 .card-icon { color: var(--gold); transition: 0.4s; font-size: 18px; opacity: 0.6; }
 .card.open .card-icon { transform: rotate(45deg); opacity: 1; }
 .card-body { max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-.card.open .card-body { max-height: 800px; }
+.card.open .card-body { max-height: 500px; }
 .card-content { padding: 0 26px 26px; border-top: 1px solid rgba(201,168,76,0.08); font-size: 13.5px; line-height: 1.8; color: var(--white-dim); }
 
-.highlight { color: var(--gold); }
-.artist-tag { font-size: 10px; padding: 7px 15px; border: 1px solid rgba(201,168,76,0.2); border-radius: 2px; color: var(--white-dim); background: rgba(201,168,76,0.05); text-transform: uppercase; letter-spacing: 1.5px; display: inline-block; margin: 8px 6px 0 0; }
-
-.resume-row { display: flex; margin-top: 15px; gap: 15px; }
-.res-label { font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; min-width: 80px; padding-top: 3px; }
-
-.link-card { display: flex; justify-content: space-between; align-items: center; padding: 20px 26px; border: 1px solid var(--border); text-decoration: none; color: var(--white); margin-bottom: 12px; transition: 0.4s; background: var(--dark-card); }
-.link-card:hover { border-color: var(--white); padding-left: 32px; background: var(--gold-soft); }
+.link-card { display: flex; justify-content: space-between; align-items: center; padding: 20px 26px; border: 1px solid var(--border); text-decoration: none; color: var(--white); margin-bottom: 12px; transition: 0.4s; background: rgba(255, 255, 255, 0.02); }
+.link-card:hover { border-color: var(--white); background: rgba(201, 168, 76, 0.08); }
 
 @media(max-width: 480px) {
     * { cursor: auto; }
     .cursor-dot, .cursor-outline { display: none; }
-    h1 { font-size: 32px; }
-    .resume-row { flex-direction: column; gap: 5px; }
 }
 </style>
 </head>
 <body>
 
-<div class="noise"></div>
 <div class="cursor-dot" id="dot"></div>
 <div class="cursor-outline" id="outline"></div>
 
 <div class="intro-wrap" id="introWrap">
+    <div class="vertical-axis"></div>
     <div class="intro-panel intro-panel-left"></div>
     <div class="intro-panel intro-panel-right"></div>
-    <div class="intro-center">
-        <span class="intro-monogram">AF</span>
-    </div>
-</div>
-
-<div class="bg">
-    <div class="orb orb-1" id="orb1"></div>
-    <div class="orb orb-2" id="orb2"></div>
+    <div class="intro-monogram">AF</div>
 </div>
 
 <div class="container" id="mainContainer">
     <header class="header">
-        <div class="brand-logo">A Future</div>
         <h1 class="gold-text">Anthony<br>Ferguson</h1>
-        <p class="tagline">Developer &middot; Creative</p>
-        <div class="divider"></div>
+        <p style="font-size: 11px; letter-spacing: 5px; text-transform: uppercase; opacity: 0.7;">Developer &middot; Creative</p>
     </header>
 
     <div class="section">
         <span class="section-label">Services</span>
         <div class="card">
             <div class="card-header">
-                <span class="card-title">Web Design &amp; Development</span>
+                <span class="card-title">Development</span>
                 <span class="card-icon">+</span>
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    <p>I design and build custom websites that not only look great, but help turn visitors into customers. Hand-coded, performance-driven, and tailored to your brand.</p>
-                    <p style="margin-top:12px;"><span class="highlight">Expertise:</span> Business sites, Shopify ecosystems, and AI-powered automation.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <span class="section-label">3005</span>
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Venue &amp; Events</span>
-                <span class="card-icon">+</span>
-            </div>
-            <div class="card-body">
-                <div class="card-content">
-                    <div style="font-family:'Cormorant Garamond',serif; font-size:24px; color:var(--white)">April 3, 2026</div>
-                    <p style="font-size:12px; opacity:0.6">Live music at 3005</p>
-                    <div style="margin-top:10px">
-                        <span class="artist-tag">The Precipitators</span>
-                        <span class="artist-tag">Mural Hall</span>
-                        <span class="artist-tag">aWannabe</span>
-                    </div>
+                    Custom web solutions, business automation, and creative design.
                 </div>
             </div>
         </div>
@@ -191,23 +141,15 @@ h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300
 
     <div class="section">
         <span class="section-label">Connect</span>
-        <a class="link-card" href="https://calendly.com/ant5ferg/new-meeting" target="_blank">
-            <span style="font-size:13px; letter-spacing:2px; text-transform:uppercase">Book a Meeting</span>
+        <a class="link-card" href="https://www.instagram.com/af.mp3/" target="_blank">
+            <span style="font-size:13px; letter-spacing:2px; text-transform:uppercase">Instagram</span>
             <span style="color:var(--gold)">&rarr;</span>
         </a>
         <a class="link-card" id="emailLink" href="#">
             <span style="font-size:13px; letter-spacing:2px; text-transform:uppercase">Email</span>
             <span style="color:var(--gold)">&rarr;</span>
         </a>
-        <a class="link-card" href="https://www.instagram.com/af.mp3/" target="_blank">
-            <span style="font-size:13px; letter-spacing:2px; text-transform:uppercase">Instagram</span>
-            <span style="color:var(--gold)">&rarr;</span>
-        </a>
     </div>
-
-    <footer style="text-align:center; margin-top:60px; padding-top:30px">
-        <p style="font-size:9px; letter-spacing:3px; opacity:0.3; text-transform:uppercase">&copy; 2026 Anthony Ferguson</p>
-    </footer>
 </div>
 
 <script>
@@ -219,50 +161,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('mainContainer');
     const sections = document.querySelectorAll('.section');
 
-    // AUTO TRIGGER REVEAL SEQUENCE
+    // AUTO TRIGGER
     setTimeout(() => {
         intro.classList.add('revealed');
         container.classList.add('active');
         sections.forEach((s, i) => {
             setTimeout(() => s.classList.add('reveal'), 400 + (i * 150));
         });
-        setTimeout(() => intro.style.display = 'none', 1500);
-    }, 2000); // Wait for the gold line and monogram to settle
+    }, 2500);
 
-    // CURSOR & PARALLAX
+    // CURSOR
     const dot = document.getElementById('dot');
     const outline = document.getElementById('outline');
-    const orb1 = document.getElementById('orb1');
-    const orb2 = document.getElementById('orb2');
-
     document.addEventListener('mousemove', (e) => {
-        const { clientX: x, clientY: y } = e;
-        dot.style.left = `${x}px`; dot.style.top = `${y}px`;
-        outline.style.left = `${x}px`; outline.style.top = `${y}px`;
-        const moveX = (x - window.innerWidth / 2) * 0.05;
-        const moveY = (y - window.innerHeight / 2) * 0.05;
-        orb1.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        orb2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
-    });
-
-    document.querySelectorAll('.card-header, .link-card, a').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            outline.style.width = '60px'; outline.style.height = '60px'; outline.style.opacity = '1';
-            outline.style.background = 'rgba(201,168,76,0.1)';
-        });
-        el.addEventListener('mouseleave', () => {
-            outline.style.width = '34px'; outline.style.height = '34px'; outline.style.opacity = '0.3';
-            outline.style.background = 'transparent';
-        });
+        dot.style.left = `${e.clientX}px`; dot.style.top = `${e.clientY}px`;
+        outline.style.left = `${e.clientX}px`; outline.style.top = `${e.clientY}px`;
     });
 
     // ACCORDION
     document.querySelectorAll('.card-header').forEach(header => {
         header.addEventListener('click', () => {
-            const card = header.parentElement;
-            const isOpen = card.classList.contains('open');
-            document.querySelectorAll('.card.open').forEach(c => c.classList.remove('open'));
-            if (!isOpen) card.classList.add('open');
+            header.parentElement.classList.toggle('open');
         });
     });
 });
