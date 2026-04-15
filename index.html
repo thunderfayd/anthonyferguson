@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -69,6 +68,11 @@ body{background:var(--dark);font-family:'Outfit',sans-serif;color:var(--white);m
 .resume-value{font-size:12px;font-weight:300;color:var(--white-dim);line-height:1.7}
 .resume-link{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding-top:14px;border-top:0.5px solid rgba(201,168,76,0.08);text-decoration:none;color:var(--gold);font-size:11px;text-transform:uppercase;letter-spacing:2px;transition:0.3s}
 .resume-link:hover{color:var(--white)}
+.how-it-works{max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.25,0.46,0.45,0.94)}
+.how-it-works.visible{max-height:600px}
+.hiw-step{display:flex;align-items:flex-start;gap:14px;margin-top:16px}
+.hiw-num{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--gold);flex-shrink:0;line-height:1.4}
+.hiw-text{font-size:12.5px;font-weight:300;color:var(--white-dim);line-height:1.8}
 .link-card{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:var(--dark-card);border:1px solid var(--border);border-radius:4px;text-decoration:none;color:var(--white);margin-bottom:10px;transition:0.4s;position:relative}
 .link-card:hover{border-color:var(--border-hover);transform:translateX(6px);background:var(--gold-soft)}
 .link-text{font-size:13px;font-weight:300;letter-spacing:2px;text-transform:uppercase}
@@ -121,6 +125,13 @@ body{background:var(--dark);font-family:'Outfit',sans-serif;color:var(--white);m
         <div class="card-body"><div class="card-content">
           <p>Your phone gets answered 24/7 &mdash; even during the dinner rush, after hours, and on holidays. Our virtual receptionist sounds natural, knows your menu, hours, and specials, handles reservations, and texts you when something needs your attention.</p>
           <p><span class="highlight">What you get:</span> Never miss a call again. No more voicemail. No more lost customers. For less than the cost of one shift per week.</p>
+          <a class="resume-link" href="#howItWorks" id="howItWorksToggle"><span>How It Works</span><span style="font-size:14px">&darr;</span></a>
+          <div class="how-it-works" id="howItWorksContent">
+            <div class="hiw-step"><span class="hiw-num">01</span><span class="hiw-text">A customer calls your business. If you&rsquo;re busy, closed, or just can&rsquo;t pick up &mdash; the call forwards automatically to your virtual receptionist.</span></div>
+            <div class="hiw-step"><span class="hiw-num">02</span><span class="hiw-text">The receptionist answers with a friendly, natural voice &mdash; using your business name, and already trained on your menu, hours, specials, and FAQs.</span></div>
+            <div class="hiw-step"><span class="hiw-num">03</span><span class="hiw-text">It handles the call &mdash; answers questions, takes reservation details, or provides directions. No hold music, no voicemail, no lost customers.</span></div>
+            <div class="hiw-step"><span class="hiw-num">04</span><span class="hiw-text">You get a text with a full summary of the call &mdash; who called, what they needed, and any action required. You stay in control without being tied to the phone.</span></div>
+          </div>
         </div></div>
       </div>
     </div>
@@ -173,6 +184,9 @@ document.addEventListener('DOMContentLoaded',function(){
   var dot=document.getElementById('dot'),outline=document.getElementById('outline');
   document.addEventListener('mousemove',function(e){dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';outline.style.left=e.clientX+'px';outline.style.top=e.clientY+'px';});
   document.querySelectorAll('.card-header').forEach(function(header){header.addEventListener('click',function(){var card=this.parentElement;var wasOpen=card.classList.contains('open');document.querySelectorAll('.card.open').forEach(function(c){c.classList.remove('open');});if(!wasOpen)card.classList.add('open');});});
+  var hiwToggle=document.getElementById('howItWorksToggle');
+  var hiwContent=document.getElementById('howItWorksContent');
+  if(hiwToggle&&hiwContent){hiwToggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();hiwContent.classList.toggle('visible');var arrow=this.querySelector('span:last-child');arrow.innerHTML=hiwContent.classList.contains('visible')?'&uarr;':'&darr;';});}
 });
 </script>
 </body>
