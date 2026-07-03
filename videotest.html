@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Diagnostic</title>
+<style>
+  body { font-family: -apple-system, sans-serif; background: #111; color: #eee; margin: 0; padding: 16px; }
+  h1 { font-size: 16px; }
+  .case { margin-bottom: 24px; border: 1px solid #444; border-radius: 8px; padding: 12px; }
+  video { width: 100%; max-width: 480px; display: block; border-radius: 6px; background: #000; }
+  .log { font-family: ui-monospace, monospace; font-size: 11px; white-space: pre-wrap; word-break: break-all; color: #8f8; margin-top: 8px; }
+  .log .err { color: #f88; }
+  #env { font-family: ui-monospace, monospace; font-size: 11px; color: #8cf; white-space: pre-wrap; word-break: break-all; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<h1>Video Diagnostic — v1 (2026-07-02 late)</h1>
+<div id="env"></div>
+
+<div class="case">
+  <strong>A: 1080p local clip (what phones get)</strong>
+  <video id="vA" src="/rings-mobile.mp4" autoplay muted loop playsinline preload="auto"></video>
+  <div class="log" id="logA"></div>
+</div>
+
+<div class="case">
+  <strong>B: 4K CloudFront clip (what desktop gets)</strong>
+  <video id="vB" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260517_222138_3e3205be-3364-417b-a64a-bfe087acbec4.mp4" autoplay muted loop playsinline preload="auto"></video>
+  <div class="log" id="logB"></div>
+</div>
+
+<script>
+  var env = document.getElementById('env');
+  env.textContent =
+    'UA: ' + navigator.userAgent +
+    '\nviewport: ' + window.innerWidth + 'x' + window.innerHeight +
+    ' | screen: ' + screen.width + 'x' + screen.height +
+    '\nreduced-motion: ' + window.matchMedia('(prefers-reduced-motion: reduce)').matches +
+    ' | saveData: ' + (navigator.connection ? String(navigator.connection.saveData) : 'n/a');
+
+  function wire(id, logId) {
+    var v = document.getElementById(id);
+    var log = document.getElementById(logId);
+    function line(msg, isErr) {
+      var d = document.createElement('div');
+      if (isErr) d.className = 'err';
+      d.textContent = new Date().toISOString().slice(11, 19) + ' ' + msg;
+      log.appendChild(d);
+    }
+    ['loadstart', 'loadedmetadata', 'canplay', 'canplaythrough', 'playing', 'pause', 'waiting', 'stalled', 'suspend'].forEach(function (ev) {
+      v.addEventListener(ev, function () {
+        line(ev + ' (readyState=' + v.readyState + ')');
+      });
+    });
+    v.addEventListener('error', function () {
+      var e = v.error;
+      line('ERROR code=' + (e ? e.code : '?') + ' msg=' + (e && e.message ? e.message : 'none'), true);
+    });
+    var p = v.play();
+    if (p && p.then) {
+      p.then(function () { line('play() promise RESOLVED — autoplay OK'); })
+       .catch(function (err) { line('play() promise REJECTED: ' + err.name + ' — ' + err.message, true); });
+    }
+    document.addEventListener('touchstart', function () {
+      if (v.paused) {
+        line('touch retry...');
+        v.play().then(function () { line('touch play OK'); })
+                .catch(function (err) { line('touch play REJECTED: ' + err.name, true); });
+      }
+    }, { passive: true });
+  }
+  wire('vA', 'logA');
+  wire('vB', 'logB');
+</script>
+</body>
+</html>
